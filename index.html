@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>💕 ¿Quieres ser mi novia?</title>
+<style>
+/* Fuente moderna y amigable */
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,700;0,900;1,700&display=swap');
+
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;width:100%;overflow:hidden;font-family:'Nunito', system-ui, sans-serif;}
+
+/* Secciones */
+.sec{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  opacity:0;pointer-events:none;transition:opacity 1s ease-in-out;padding:24px;}
+.sec.on{opacity:1;pointer-events:all;}
+
+/* Fondos mejorados */
+#sec1{background:radial-gradient(circle at 50% 40%, #3a0d40 0%, #0a0015 100%);}
+#sec2, #sec3, #sec4{background:#0a0015;}
+canvas{position:fixed;inset:0;z-index:0;}
+
+.content{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;text-align:center;}
+
+/* Textos principales */
+.rose{font-size:80px;animation:float 3s ease-in-out infinite;filter:drop-shadow(0 10px 15px rgba(255,105,180,0.5));}
+.q-title{font-size:clamp(26px,7vw,36px);font-weight:900;color:#fff;
+  margin:20px 0 10px;text-shadow:0 0 20px #ff1493, 0 0 40px #ff69b4;letter-spacing:1px;}
+.q-sub{font-size:16px;color:#ffb3d9;font-weight:700;margin-bottom:40px;opacity:0.9;}
+
+/* Contenedor de botones alineado */
+.btns{position:relative;width:100%;display:flex;gap:20px;align-items:center;justify-content:center;height:60px;}
+
+/* Estilo base de los botones */
+button{font-family:inherit;transition:transform 0.2s, box-shadow 0.2s;}
+button:active{transform:scale(0.95);}
+.btn-yes, .btn-no{color:#fff;border:none;border-radius:50px;padding:16px 40px;font-size:20px;font-weight:900;cursor:pointer;touch-action:manipulation;}
+
+/* Botón Sí */
+.btn-yes{background:linear-gradient(135deg,#ff3366,#ff0055);box-shadow:0 10px 25px rgba(255,0,85,0.5);animation:pulse-btn 2s infinite;}
+
+/* Botón No (ya no es fixed al inicio) */
+.btn-no{background:linear-gradient(135deg,#8e2de2,#4a00e0);box-shadow:0 10px 25px rgba(74,0,224,0.4);z-index:100;}
+
+/* Botón siguiente */
+.btn-next{background:linear-gradient(135deg,#ff3366,#9b3dcc);color:#fff;border:none;
+  border-radius:50px;padding:16px 40px;font-size:18px;font-weight:700;cursor:pointer;
+  margin-top:40px;box-shadow:0 10px 25px rgba(155,61,204,0.5);
+  animation:fadeUp .9s .8s ease both;opacity:0;animation-fill-mode:forwards;}
+
+/* Títulos Secciones 2 y 4 */
+.yes-title, #sec4 h2{font-size:clamp(28px,8vw,44px);font-weight:900;color:#fff;
+  text-shadow:0 0 20px #ff1493,0 0 40px #ff0055;animation:fadeUp .9s ease both;}
+.yes-sub, #sec4 p{color:#ffb3d9;font-size:18px;font-weight:700;margin-top:15px;
+  animation:fadeUp .9s .4s ease both;opacity:0;animation-fill-mode:forwards;}
+
+/* Corazones flotantes */
+.fh{position:fixed;pointer-events:none;z-index:5;animation:floatUp linear forwards;}
+
+/* Animaciones */
+@keyframes floatUp{0%{transform:translateY(0) scale(1);opacity:1;}100%{transform:translateY(-100vh) scale(.5);opacity:0;}}
+@keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-15px);}}
+@keyframes pulse-btn{0%,100%{transform:scale(1);box-shadow:0 10px 25px rgba(255,0,85,0.5);}50%{transform:scale(1.05);box-shadow:0 15px 35px rgba(255,0,85,0.7);}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(30px);}to{opacity:1;transform:translateY(0);}}
+</style>
+</head>
+<body>
+
+<div class="sec on" id="sec1">
+  <canvas id="c1"></canvas>
+  <div class="content">
+    <div class="rose">🌹</div>
+    <h1 class="q-title">¿Quieres ser mi novia?</h1>
+    <p class="q-sub">Piénsalo bien… o no tanto 😊</p>
+    <div class="btns">
+      <button class="btn-yes" id="btnYes" onclick="pressYes()">💖 Sí</button>
+      <button class="btn-no" id="btnNo" onmouseover="runNo()" ontouchstart="runNo(event)">💔 No</button>
+    </div>
+  </div>
+</div>
+
+<div class="sec" id="sec2">
+  <canvas id="c2"></canvas>
+  <div class="content">
+    <div style="font-size:80px;animation:float 2s infinite">🥰</div>
+    <h2 class="yes-title">¡Sabía que dirías que sí!</h2>
+    <p class="yes-sub">Eres la persona más especial de mi vida 💕</p>
+    <button class="btn-next" onclick="goSec3()">Ver algo más bonito ✨</button>
+  </div>
+</div>
+
+<div class="sec" id="sec3">
+  <canvas id="c3"></canvas>
+  <div class="content">
+    <button class="btn-next" onclick="goSec4()" style="margin-top:75vh">Ver lo más especial 💗</button>
+  </div>
+</div>
+
+<div class="sec" id="sec4">
+  <canvas id="c4"></canvas>
+  <div class="content">
+    <h2>Te quiero con todo mi corazón 💗</h2>
+    <p>Cada partícula soy yo, pensando siempre en ti ✨</p>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════
+//  MUSIC
+// ══════════════════════════════════════
+let aud = null;
+function startMusic(){
+  if(aud) return;
+  const direct = "https://www.dropbox.com/scl/fi/fp91fmwlv5cb883r9ci2d/Amor-M4A_128K.m4a?rlkey=g1zjdnfvo891t6tw26fmhb4f1&st=qzq19vx2&raw=1";
+  aud = new Audio(direct);
+  aud.loop = true;
+  aud.volume = 0;
+  aud.play().then(()=>fadeInAudio()).catch(()=>{
+    document.addEventListener('touchstart', retryAudio, {once:true});
+    document.addEventListener('click', retryAudio, {once:true});
+  });
+}
+function retryAudio(){ aud && aud.play().then(()=>fadeInAudio()).catch(()=>{}); }
+function fadeInAudio(){ let v=0; const id=setInterval(()=>{v=Math.min(1,v+.03);aud.volume=v;if(v>=1)clearInterval(id);},100); }
+
+// ══════════════════════════════════════
+//  HELPERS
+// ══════════════════════════════════════
+function showSec(id){
+  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+}
+const emojis=['💖','💕','💗','💓','❤️','💝','🌸','✨','💫'];
+function spawnHearts(n){
+  for(let i=0;i<n;i++){
+    setTimeout(()=>{
+      const el=document.createElement('div');
+      el.className='fh';
+      el.textContent=emojis[Math.floor(Math.random()*emojis.length)];
+      const size=20+Math.random()*30;
+      el.style.cssText=`left:${5+Math.random()*90}vw;bottom:0;font-size:${size}px;animation-duration:${2.5+Math.random()*2.5}s;`;
+      document.body.appendChild(el);
+      setTimeout(()=>el.remove(),5000);
+    },i*120);
+  }
+}
+
+// ══════════════════════════════════════
+//  SEC 1 — ESTRELLAS
+// ══════════════════════════════════════
+(function(){
+  const cv=document.getElementById('c1');
+  const cx=cv.getContext('2d');
+  let stars=[];
+  function init(){
+    cv.width=innerWidth;cv.height=innerHeight;
+    stars=Array.from({length:100},()=>({
+      x:Math.random()*innerWidth,y:Math.random()*innerHeight,
+      r:Math.random()*1.5+.5,a:Math.random(),da:Math.random()*.015+.005
+    }));
+  }
+  init();window.addEventListener('resize',init);
+  (function draw(){
+    requestAnimationFrame(draw);
+    cx.clearRect(0,0,cv.width,cv.height);
+    stars.forEach(s=>{
+      s.a+=s.da;if(s.a>1||s.a<0)s.da*=-1;
+      cx.globalAlpha=s.a*.8;cx.fillStyle='#fff';
+      cx.beginPath();cx.arc(s.x,s.y,s.r,0,Math.PI*2);cx.fill();
+    });cx.globalAlpha=1;
+  })();
+})();
+
+// ══════════════════════════════════════
+//  BOTÓN NO — Corrección de posición inicial
+// ══════════════════════════════════════
+let noCount=0, noMoved=false;
+function runNo(e){
+  if(e && e.cancelable) e.preventDefault();
+  noCount++;
+  const btn=document.getElementById('btnNo');
+  if(noCount>8){btn.style.opacity='0';btn.style.pointerEvents='none';return;}
+  
+  // La primera vez que se toca, lo desvinculamos para que flote
+  if(!noMoved){
+    noMoved=true;
+    const r=btn.getBoundingClientRect();
+    btn.style.position='fixed';
+    btn.style.left=r.left+'px';
+    btn.style.top=r.top+'px';
+    btn.style.width=r.width+'px';
+    btn.style.margin='0';
+    // Le damos un pequeño tiempo antes de aplicar la transición suave para que no salte feo
+    setTimeout(()=> { btn.style.transition='all 0.35s ease-out'; }, 10);
+  }
+  
+  const margin=40;
+  const maxX = innerWidth - btn.offsetWidth - margin;
+  const maxY = innerHeight - btn.offsetHeight - margin;
+  
+  const x = margin + Math.random() * (maxX - margin);
+  const y = margin + Math.random() * (maxY - margin);
+  
+  btn.style.left=x+'px';
+  btn.style.top=y+'px';
+  btn.style.opacity=Math.max(.3, 1-noCount*.1);
+  btn.style.transform=`scale(${Math.max(.6, 1-noCount*.05)})`;
+}
+
+// ══════════════════════════════════════
+//  PRESS YES
+// ══════════════════════════════════════
+let heartInterval=null;
+function pressYes(){
+  startMusic();
+  showSec('sec2');
+  spawnHearts(25);
+  heartInterval=setInterval(()=>spawnHearts(6),1500);
+}
+
+// ══════════════════════════════════════
+//  SEC 3 — GALAXIA Y FRASES (Más rápido y legible)
+// ══════════════════════════════════════
+let galaxyStarted=false;
+function goSec3(){
+  clearInterval(heartInterval);
+  showSec('sec3');
+  if(!galaxyStarted){galaxyStarted=true;initGalaxy();}
+}
+(function(){
+  const miniPhrases=["te quiero","te adoro","brillas","eres mi todo","mi amor","te pienso","eres bonita","mi cielo","mi vida","te necesito","eres especial","única","perfecta","eres luz","siempre tú","me encantas","mi alegría","mi mundo","eres magia","te elijo"];
+  const cv=document.getElementById('c3');
+  const cx=cv.getContext('2d');
+  let gPts=[],fTexts=[],running=false,alpha=0;
+
+  window.initGalaxy=function(){
+    cv.width=innerWidth;cv.height=innerHeight;
+    const W=cv.width,H=cv.height;
+    
+    // Puntos de la Galaxia (optimizados para fluidez)
+    gPts=[];
+    const arms=4,perArm=100; 
+    for(let a=0;a<arms;a++){
+      for(let i=0;i<perArm;i++){
+        const t=(i/perArm)*Math.PI*4.5+a*(Math.PI*2/arms);
+        const r=(i/perArm)*(Math.min(W,H)*.44);
+        gPts.push({
+          x:W/2+Math.cos(t)*r+(Math.random()-.5)*32*(i/perArm+.15),
+          y:H/2+Math.sin(t)*r+(Math.random()-.5)*32*(i/perArm+.15),
+          r:Math.random()*1.8+.4,
+          hue:270+Math.random()*90,bright:55+Math.random()*40,
+          tw:Math.random()*Math.PI*2
+        });
+      }
+    }
+    for(let i=0;i<40;i++){
+      const ang=Math.random()*Math.PI*2,d=Math.random()*30;
+      gPts.push({x:W/2+Math.cos(ang)*d,y:H/2+Math.sin(ang)*d,r:Math.random()*2.5+.5,hue:310,bright:90,tw:Math.random()*Math.PI*2});
+    }
+
+    // Textos flotantes (Más grandes y rápidos)
+    fTexts=Array.from({length:35},()=>({
+      x:Math.random()*W,y:Math.random()*H,
+      vx:(Math.random()-.5)*1.8, // Velocidad aumentada
+      vy:(Math.random()-.5)*1.8, // Velocidad aumentada
+      text:miniPhrases[Math.floor(Math.random()*miniPhrases.length)],
+      size:Math.random()*10+18, // Letra más grande (18 a 28px)
+      hue:300+Math.random()*60,
+      a:Math.random()*.5+.3,ph:Math.random()*Math.PI*2
+    }));
+    if(!running){running=true;draw();}
+  };
+
+  function draw(){
+    if(!document.getElementById('sec3').classList.contains('on')){requestAnimationFrame(draw);return;}
+    requestAnimationFrame(draw);
+    const W=cv.width,H=cv.height;
+    cx.clearRect(0,0,W,H);
+    alpha=Math.min(1,alpha+.015); // Aparece más rápido
+
+    // Galaxia rotando más rápido
+    gPts.forEach(p=>{
+      p.tw+=.04; // Rotación más rápida
+      cx.globalAlpha=alpha*(.5+.5*Math.sin(p.tw));
+      cx.fillStyle=`hsl(${p.hue},90%,${p.bright}%)`;
+      cx.shadowColor=`hsl(${p.hue},100%,70%)`;
+      cx.shadowBlur=8;
+      cx.beginPath();cx.arc(p.x,p.y,p.r,0,Math.PI*2);cx.fill();
+    });
+    cx.shadowBlur=0;
+
+    // Frases flotantes legibles
+    cx.textAlign='center';cx.textBaseline='middle';
+    fTexts.forEach(ft=>{
+      ft.x+=ft.vx;ft.y+=ft.vy;ft.ph+=.04;
+      if(ft.x<-100)ft.x=W+100;if(ft.x>W+100)ft.x=-100;
+      if(ft.y<-50)ft.y=H+50;if(ft.y>H+50)ft.y=-50;
+      
+      cx.globalAlpha=alpha*(ft.a+.2*Math.sin(ft.ph));
+      cx.fillStyle='#ffffff'; // Letra blanca para destacar
+      cx.shadowColor=`hsl(${ft.hue},100%,65%)`; // Sombra de color brillante
+      cx.shadowBlur=12; // Resplandor fuerte
+      cx.font=`bold italic ${ft.size}px 'Nunito', sans-serif`; // Fuente más gruesa
+      cx.fillText(ft.text,ft.x,ft.y);
+    });
+    cx.shadowBlur=0;cx.globalAlpha=1;
+  }
+})();
+
+// ══════════════════════════════════════
+//  SEC 4 — CORAZÓN DE PARTÍCULAS
+// ══════════════════════════════════════
+let heartStarted=false;
+function goSec4(){
+  showSec('sec4');
+  if(!heartStarted){heartStarted=true;initHeart();}
+  spawnHearts(20);
+}
+function initHeart(){
+  const cv=document.getElementById('c4');
+  const cx=cv.getContext('2d');
+  cv.width=innerWidth;cv.height=innerHeight;
+  const W=cv.width,H=cv.height;
+  const scale=Math.min(W,H)/45;
+  const N=300;
+
+  function hx(t){return 16*Math.pow(Math.sin(t),3);}
+  function hy(t){return -(13*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t));}
+
+  const stars=Array.from({length:80},()=>({
+    x:Math.random()*W,y:Math.random()*H,
+    r:Math.random()*1.2+.3,a:Math.random(),da:Math.random()*.015+.005
+  }));
+
+  const pts=Array.from({length:N},(_,i)=>{
+    const t=(i/N)*Math.PI*2;
+    return{
+      x:Math.random()*W,y:Math.random()*H,
+      tx:W/2+hx(t)*scale,ty:H/2+hy(t)*scale - 30, // Corazón un poco más arriba
+      hue:330+Math.random()*40,bright:65+Math.random()*35,
+      sz:Math.random()*3+1.5,ph:Math.random()*Math.PI*2
+    };
+  });
+
+  let prog=0;
+  (function draw(){
+    requestAnimationFrame(draw);
+    cx.clearRect(0,0,W,H);
+
+    stars.forEach(s=>{
+      s.a+=s.da;if(s.a>1||s.a<0)s.da*=-1;
+      cx.globalAlpha=s.a*.7;cx.fillStyle='#fff';
+      cx.beginPath();cx.arc(s.x,s.y,s.r,0,Math.PI*2);cx.fill();
+    });
+
+    prog=Math.min(1,prog+.01); // Se forma un poquito más rápido
+    pts.forEach(p=>{
+      p.ph+=.04;
+      const e=1-Math.pow(1-prog,3);
+      p.x+=(p.tx-p.x)*e*.08;
+      p.y+=(p.ty-p.y)*e*.08;
+      const pulse=prog>.9?Math.sin(p.ph)*1:0;
+      cx.globalAlpha=.8+.2*Math.sin(p.ph);
+      cx.fillStyle=`hsl(${p.hue},100%,${p.bright}%)`;
+      cx.shadowColor=`hsl(${p.hue},100%,75%)`;
+      cx.shadowBlur=prog>.85?20:10;
+      cx.beginPath();cx.arc(p.x,p.y,p.sz+pulse,0,Math.PI*2);cx.fill();
+    });
+    cx.shadowBlur=0;cx.globalAlpha=1;
+  })();
+}
+</script>
+</body>
+</html>
